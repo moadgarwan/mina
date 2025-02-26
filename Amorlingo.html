@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amore Lingo - For Mina</title>
+  <style>
+    :root {
+      --primary-color: #ff6b81;
+      --secondary-color: #ffa5b1;
+      --dark-color: #333;
+      --light-color: #f9f9f9;
+      --success-color: #6bd968;
+      --error-color: #ff6b6b;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: var(--light-color);
+      color: var(--dark-color);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    header {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    .logo i {
+      margin-right: 0.5rem;
+      font-size: 2rem;
+    }
+    .welcome-banner {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+      background-image: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      margin-bottom: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .welcome-banner h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .welcome-banner p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .heart {
+      color: white;
+      font-size: 1.5rem;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    .language-selector {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    .language-btn {
+      background-color: white;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 0.8rem 1.5rem;
+      margin: 0 0.5rem;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .language-btn:hover, .language-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    .section {
+      background-color: white;
+      border-radius: 10px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+    .section h2 {
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--secondary-color);
+      padding-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+    .section h2 i {
+      margin-right: 0.5rem;
+    }
+    .word-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .word-card {
+      background-color: var(--light-color);
+      border-radius: 8px;
+      padding: 1rem;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      border-left: 4px solid var(--primary-color);
+    }
+    .word-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    .word-english {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .word-translation {
+      color: #666;
+      margin-top: 0.3rem;
+    }
+    .sentence-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .sentence-card {
+      background-color: var(--light-color);
+      border-radius: 8px;
+      padding: 1rem;
+      border-left: 4px solid var(--secondary-color);
+    }
+    .sentence-english {
+      font-weight: bold;
+    }
+    .sentence-translation {
+      color: #666;
+      margin-top: 0.5rem;
+    }
+    .exercise {
+      background-color: var(--light-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #9b59b6;
+    }
+    .exercise-question {
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+    @media (max-width: 600px) {
+      .options {
+        grid-template-columns: 1fr;
+      }
+    }
+    .option {
+      background-color: white;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .option:hover {
+      border-color: var(--primary-color);
+    }
+    .option.selected {
+      border-color: var(--primary-color);
+      background-color: rgba(255, 107, 129, 0.1);
+    }
+    .option.correct {
+      border-color: var(--success-color);
+      background-color: rgba(107, 217, 104, 0.1);
+    }
+    .option.incorrect {
+      border-color: var(--error-color);
+      background-color: rgba(255, 107, 107, 0.1);
+    }
+    .btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      margin: 1.5rem auto 0;
+    }
+    .btn:hover {
+      background-color: #ff5173;
+      transform: translateY(-2px);
+    }
+    .progress-bar {
+      height: 10px;
+      background-color: #eee;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .progress {
+      height: 100%;
+      background-color: var(--primary-color);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .hearts {
+      display: flex;
+      align-items: center;
+    }
+    .hearts i {
+      color: var(--primary-color);
+      margin-left: 0.2rem;
+    }
+    .quiz-section {
+      display: none;
+    }
+    .quiz-result {
+      text-align: center;
+      margin-top: 2rem;
+      padding: 2rem;
+      border-radius: 10px;
+      display: none;
+    }
+    .quiz-result.success {
+      background-color: rgba(107, 217, 104, 0.1);
+      border: 2px solid var(--success-color);
+    }
+    .quiz-result.failure {
+      background-color: rgba(255, 107, 107, 0.1);
+      border: 2px solid var(--error-color);
+    }
+    .quiz-result h3 {
+      margin-bottom: 1rem;
+      color: var(--dark-color);
+    }
+    .quiz-result i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .quiz-result i.success {
+      color: var(--success-color);
+    }
+    .quiz-result i.failure {
+      color: var(--error-color);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .footer-heart {
+      color: var(--primary-color);
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-heart"></i> Amore Lingo
+        </div>
+        <div class="hearts">
+          <span>Lives:</span>
+          <i class="fas fa-heart"></i>
+          <i class="fas fa-heart"></i>
+          <i class="fas fa-heart"></i>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="welcome-banner">
+      <h1>Welcome, Mina <i class="fas fa-heart heart"></i></h1>
+      <p>This is a special place created just for you. Learn English with love, one day at a time.</p>
+    </div>
+
+    <div class="language-selector">
+      <h2>Choose your translation language:</h2>
+      <button class="language-btn active" data-lang="ar">Arabic</button>
+      <button class="language-btn" data-lang="fr">French</button>
+      <button class="language-btn" data-lang="en">English</button>
+    </div>
+
+    <div class="progress-info">
+      <span>Day 1 - Basics</span>
+      <span>0/5 sections completed</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- Word Section -->
+    <div class="section" id="words-section">
+      <h2><i class="fas fa-book"></i> Vocabulary - Day 1</h2>
+      <div class="word-list">
+        <!-- Words will be dynamically loaded here -->
+      </div>
+      <button class="btn" id="complete-words">I've learned these words</button>
+    </div>
+
+    <!-- Sentence Section -->
+    <div class="section hidden" id="sentences-section">
+      <h2><i class="fas fa-comment"></i> Phrases - Day 1</h2>
+      <div class="sentence-list">
+        <!-- Sentences will be dynamically loaded here -->
+      </div>
+      <button class="btn" id="complete-sentences">I've learned these phrases</button>
+    </div>
+
+    <!-- Exercise Section -->
+    <div class="section hidden" id="exercises-section">
+      <h2><i class="fas fa-dumbbell"></i> Exercises - Day 1</h2>
+      <div id="exercise-container">
+        <!-- Exercises will be dynamically loaded here -->
+      </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="section hidden quiz-section" id="quiz-section">
+      <h2><i class="fas fa-question-circle"></i> Quiz - Day 1</h2>
+      <div id="quiz-container">
+        <!-- Quiz questions will be dynamically loaded here -->
+      </div>
+      <div class="quiz-result" id="quiz-success">
+        <i class="fas fa-check-circle success"></i>
+        <h3>Great job, Mina!</h3>
+        <p>You've completed Day 1 successfully. You're amazing!</p>
+      </div>
+      <div class="quiz-result" id="quiz-failure">
+        <i class="fas fa-times-circle failure"></i>
+        <h3>Don't worry, Mina!</h3>
+        <p>Learning takes time. Let's try again!</p>
+        <button class="btn" id="retry-quiz">Try again</button>
+      </div>
+    </div>
+
+    <!-- Completion Section -->
+    <div class="section hidden" id="completion-section">
+      <h2><i class="fas fa-trophy"></i> Day 1 Completed!</h2>
+      <div style="text-align: center; padding: 2rem;">
+        <i class="fas fa-heart" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+        <h3>Congratulations, Mina!</h3>
+        <p>You've completed Day 1 of your English learning journey. I'm so proud of you!</p>
+        <p>Come back tomorrow for more learning with love.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Created with <i class="fas fa-heart footer-heart"></i> just for Mina</p>
+  </footer>
+
+  <script>
+    // Data object
+    const content = {
+      words: [
+        { english: "opportunity", ar: "فرصة", fr: "opportunité" },
+        { english: "experience", ar: "تجربة", fr: "expérience" },
+        { english: "development", ar: "تطوير", fr: "développement" },
+        { english: "relationship", ar: "علاقة", fr: "relation" },
+        { english: "environment", ar: "بيئة", fr: "environnement" },
+        { english: "challenge", ar: "تحدي", fr: "défi" },
+        { english: "perspective", ar: "منظور", fr: "perspective" },
+        { english: "communication", ar: "تواصل", fr: "communication" },
+        { english: "consideration", ar: "اعتبار", fr: "considération" },
+        { english: "understanding", ar: "فهم", fr: "compréhension" },
+        { english: "achievement", ar: "إنجاز", fr: "accomplissement" },
+        { english: "influence", ar: "تأثير", fr: "influence" },
+        { english: "connection", ar: "اتصال", fr: "connexion" },
+        { english: "confidence", ar: "ثقة", fr: "confiance" },
+        { english: "celebration", ar: "احتفال", fr: "célébration" },
+        { english: "creativity", ar: "إبداع", fr: "créativité" },
+        { english: "inspiration", ar: "إلهام", fr: "inspiration" },
+        { english: "motivation", ar: "تحفيز", fr: "motivation" },
+        { english: "dedication", ar: "تفاني", fr: "dévouement" },
+        { english: "appreciation", ar: "تقدير", fr: "appréciation" },
+        { english: "friendship", ar: "صداقة", fr: "amitié" },
+        { english: "memories", ar: "ذكريات", fr: "souvenirs" },
+        { english: "adventure", ar: "مغامرة", fr: "aventure" },
+        { english: "happiness", ar: "سعادة", fr: "bonheur" },
+        { english: "improvement", ar: "تحسين", fr: "amélioration" },
+        { english: "reflection", ar: "تأمل", fr: "réflexion" },
+        { english: "progress", ar: "تقدم", fr: "progrès" },
+        { english: "commitment", ar: "التزام", fr: "engagement" },
+        { english: "gratitude", ar: "امتنان", fr: "gratitude" },
+        { english: "compassion", ar: "شفقة", fr: "compassion" }
+      ],
+      sentences: [
+        { 
+          english: "I believe that every challenge is an opportunity for growth.", 
+          ar: "أؤمن أن كل تحد هو فرصة للنمو.", 
+          fr: "Je crois que chaque défi est une opportunité de croissance."
+        },
+        { 
+          english: "The most beautiful memories are created when people share experiences together.", 
+          ar: "تُصنع أجمل الذكريات عندما يشارك الناس التجارب معًا.", 
+          fr: "Les plus beaux souvenirs sont créés lorsque les gens partagent des expériences ensemble."
+        },
+        { 
+          english: "Effective communication is essential for developing strong relationships.", 
+          ar: "التواصل الفعال ضروري لتطوير علاقات قوية.", 
+          fr: "Une communication efficace est essentielle pour développer des relations solides."
+        },
+        { 
+          english: "A supportive environment allows for personal growth and creativity.", 
+          ar: "البيئة الداعمة تسمح بالنمو الشخصي والإبداع.", 
+          fr: "Un environnement favorable permet la croissance personnelle et la créativité."
+        },
+        { 
+          english: "Taking time for reflection helps us gain new perspectives.", 
+          ar: "أخذ الوقت للتأمل يساعدنا على اكتساب وجهات نظر جديدة.", 
+          fr: "Prendre du temps pour la réflexion nous aide à acquérir de nouvelles perspectives."
+        },
+        { 
+          english: "Her dedication to learning inspires everyone around her.", 
+          ar: "تفانيها في التعلم يلهم كل من حولها.", 
+          fr: "Son dévouement à l'apprentissage inspire tout le monde autour d'elle."
+        },
+        { 
+          english: "Expressing gratitude improves both relationships and personal happiness.", 
+          ar: "التعبير عن الامتنان يحسن العلاقات والسعادة الشخصية.", 
+          fr: "Exprimer sa gratitude améliore à la fois les relations et le bonheur personnel."
+        },
+        { 
+          english: "True friendship is built on mutual understanding and respect.", 
+          ar: "الصداقة الحقيقية مبنية على التفاهم والاحترام المتبادل.", 
+          fr: "La véritable amitié est construite sur la compréhension mutuelle et le respect."
+        },
+        { 
+          english: "Every achievement, no matter how small, deserves celebration.", 
+          ar: "كل إنجاز، مهما كان صغيرًا، يستحق الاحتفال.", 
+          fr: "Chaque accomplissement, aussi petit soit-il, mérite d'être célébré."
+        },
+        { 
+          english: "The connections we make with others often have a lasting influence on our lives.", 
+          ar: "الروابط التي نقيمها مع الآخرين غالبًا ما يكون لها تأثير دائم على حياتنا.", 
+          fr: "Les connexions que nous établissons avec les autres ont souvent une influence durable sur nos vies."
+        },
+        { 
+          english: "Building confidence takes time and consistent effort.", 
+          ar: "بناء الثقة يستغرق وقتًا وجهدًا متواصلًا.", 
+          fr: "Bâtir la confiance prend du temps et un effort constant."
+        },
+        { 
+          english: "Compassion allows us to understand others' experiences and perspectives.", 
+          ar: "التعاطف يسمح لنا بفهم تجارب ووجهات نظر الآخرين.", 
+          fr: "La compassion nous permet de comprendre les expériences et les perspectives des autres."
+        },
+        { 
+          english: "Finding motivation within yourself is more powerful than external encouragement.", 
+          ar: "إيجاد الحافز داخل نفسك أقوى من التشجيع الخارجي.", 
+          fr: "Trouver la motivation en soi est plus puissant que l'encouragement externe."
+        },
+        { 
+          english: "Each day brings a new adventure and opportunity for improvement.", 
+          ar: "كل يوم يجلب مغامرة جديدة وفرصة للتحسين.", 
+          fr: "Chaque jour apporte une nouvelle aventure et une opportunité d'amélioration."
+        },
+        { 
+          english: "Showing appreciation for others' contributions strengthens community bonds.", 
+          ar: "إظهار التقدير لمساهمات الآخرين يقوي روابط المجتمع.", 
+          fr: "Montrer de l'appréciation pour les contributions des autres renforce les liens communautaires."
+        }
+      ],
+      exercises: [
+        {
+          question: "Fill in the blank: 'Every challenge is an _____ for growth.'",
+          options: ["opportunity", "experience", "achievement", "celebration"],
+          correct: "opportunity",
+          ar: {
+            question: "املأ الفراغ: 'كل تحد هو _____ للنمو.'",
+            options: ["فرصة", "تجربة", "إنجاز", "احتفال"]
+          },
+          fr: {
+            question: "Complétez la phrase: 'Chaque défi est une _____ de croissance.'",
+            options: ["opportunité", "expérience", "accomplissement", "célébration"]
+          }
+        },
+        {
+          question: "Choose the word that means 'the sharing of ideas or thoughts':",
+          options: ["communication", "friendship", "confidence", "progress"],
+          correct: "communication",
+          ar: {
+            question: "اختر الكلمة التي تعني 'تبادل الأفكار أو الأفكار':",
+            options: ["تواصل", "صداقة", "ثقة", "تقدم"]
+          },
+          fr: {
+            question: "Choisissez le mot qui signifie 'le partage d'idées ou de pensées':",
+            options: ["communication", "amitié", "confiance", "progrès"]
+          }
+        },
+        {
+          question: "Which sentence uses the word 'reflection' correctly?",
+          options: [
+            "Taking time for reflection helps us gain new perspectives.",
+            "She has many reflection in her room.",
+            "The reflection was very delicious.",
+            "I bought a new reflection yesterday."
+          ],
+          correct: "Taking time for reflection helps us gain new perspectives.",
+          ar: {
+            question: "أي جملة تستخدم كلمة 'تأمل' بشكل صحيح؟",
+            options: [
+              "أخذ الوقت للتأمل يساعدنا على اكتساب وجهات نظر جديدة.",
+              "لديها العديد من التأمل في غرفتها.",
+              "كان التأمل لذيذًا جدًا.",
+              "اشتريت تأملًا جديدًا بالأمس."
+            ]
+          },
+          fr: {
+            question: "Quelle phrase utilise correctement le mot 'réflexion'?",
+            options: [
+              "Prendre du temps pour la réflexion nous aide à acquérir de nouvelles perspectives.",
+              "Elle a beaucoup de réflexion dans sa chambre.",
+              "La réflexion était très délicieuse.",
+              "J'ai acheté une nouvelle réflexion hier."
+            ]
+          }
+        },
+        {
+          question: "Match the definition: 'A feeling of thankfulness and appreciation'",
+          options: ["gratitude", "challenge", "creativity", "connection"],
+          correct: "gratitude",
+          ar: {
+            question: "طابق التعريف: 'شعور بالشكر والتقدير'",
+            options: ["امتنان", "تحدي", "إبداع", "اتصال"]
+          },
+          fr: {
+            question: "Associez la définition: 'Un sentiment de reconnaissance et d'appréciation'",
+            options: ["gratitude", "défi", "créativité", "connexion"]
+          }
+        },
+        {
+          question: "Arrange these words to form a meaningful sentence: 'understanding mutual on built is friendship True'",
+          options: [
+            "True friendship is built on mutual understanding.",
+            "Understanding true friendship is built on mutual.",
+            "Mutual understanding is built on true friendship.",
+            "Is true friendship built on mutual understanding."
+          ],
+          correct: "True friendship is built on mutual understanding.",
+          ar: {
+            question: "رتب هذه الكلمات لتكوين جملة ذات معنى: 'المتبادل التفاهم على مبنية هي الحقيقية الصداقة'",
+            options: [
+              "الصداقة الحقيقية مبنية على التفاهم المتبادل.",
+              "فهم الصداقة الحقيقية مبني على المتبادل.",
+              "التفاهم المتبادل مبني على الصداقة الحقيقية.",
+              "هل الصداقة الحقيقية مبنية على التفاهم المتبادل."
+            ]
+          },
+          fr: {
+            question: "Arrangez ces mots pour former une phrase significative: 'mutuelle compréhension la sur construite est amitié véritable La'",
+            options: [
+              "La véritable amitié est construite sur la compréhension mutuelle.",
+              "La compréhension de la véritable amitié est construite sur mutuelle.",
+              "La compréhension mutuelle est construite sur la véritable amitié.",
+              "Est la véritable amitié construite sur la compréhension mutuelle."
+            ]
+          }
+        }
+      ],
+      quizzes: [
+        {
+          question: "What is the correct translation of 'relationship'?",
+          options: ["علاقة/relation", "تجربة/expérience", "بيئة/environnement", "تحدي/défi"],
+          correct: "علاقة/relation",
+          ar: {
+            question: "ما هي الترجمة الصحيحة لكلمة 'relationship'؟"
+          },
+          fr: {
+            question: "Quelle est la traduction correcte de 'relationship'?"
+          }
+        },
+        {
+          question: "Complete the sentence: 'Her dedication to learning _____ everyone around her.'",
+          options: ["inspires", "develops", "challenges", "appreciates"],
+          correct: "inspires",
+          ar: {
+            question: "أكمل الجملة: 'تفانيها في التعلم _____ كل من حولها.'"
+          },
+          fr: {
+            question: "Complétez la phrase: 'Son dévouement à l'apprentissage _____ tout le monde autour d'elle.'"
+          }
+        },
+        {
+          question: "Which word means 'a feeling of deep sympathy and concern for others'?",
+          options: ["compassion", "confidence", "celebration", "challenge"],
+          correct: "compassion",
+          ar: {
+            question: "أي كلمة تعني 'شعور بالتعاطف العميق والاهتمام بالآخرين'؟"
+          },
+          fr: {
+            question: "Quel mot signifie 'un sentiment de profonde sympathie et de préoccupation pour les autres'?"
+          }
+        },
+        {
+          question: "What is the meaning of the sentence: 'Every achievement, no matter how small, deserves celebration.'?",
+          options: [
+            "We should celebrate all accomplishments, even minor ones.",
+            "Only major achievements should be celebrated.",
+            "Celebrations are more important than achievements.",
+            "Small achievements are not worth noting."
+          ],
+          correct: "We should celebrate all accomplishments, even minor ones.",
+          ar: {
+            question: "ما معنى الجملة: 'كل إنجاز، مهما كان صغيرًا، يستحق الاحتفال.'؟"
+          },
+          fr: {
+            question: "Quelle est la signification de la phrase : 'Chaque accomplissement, aussi petit soit-il, mérite d'être célébré.'?"
+          }
+        }
+      ]
+    };
+
+    let selectedLanguage = 'ar';
+    let currentSection = 0;
+    const totalSections = 5;
+
+    function updateProgress() {
+      const progress = document.getElementById('progress');
+      const progressInfo = document.querySelector('.progress-info span:nth-child(2)');
+      const progressPercent = (currentSection / (totalSections - 1)) * 100;
+      progress.style.width = progressPercent + '%';
+      progressInfo.textContent = currentSection + '/5 sections completed';
+    }
+
+    function renderWords() {
+      const wordList = document.querySelector('.word-list');
+      wordList.innerHTML = '';
+      content.words.forEach(word => {
+        const card = document.createElement('div');
+        card.className = 'word-card';
+        card.innerHTML = `
+          <div class="word-english">${word.english}</div>
+          ${selectedLanguage === 'en' ? '' : `<div class="word-translation">${word[selectedLanguage]}</div>`}
+        `;
+        wordList.appendChild(card);
+      });
+    }
+
+    function renderSentences() {
+      const sentenceList = document.querySelector('.sentence-list');
+      sentenceList.innerHTML = '';
+      content.sentences.forEach(sentence => {
+        const card = document.createElement('div');
+        card.className = 'sentence-card';
+        card.innerHTML = `
+          <div class="sentence-english">${sentence.english}</div>
+          ${selectedLanguage === 'en' ? '' : `<div class="sentence-translation">${sentence[selectedLanguage]}</div>`}
+        `;
+        sentenceList.appendChild(card);
+      });
+    }
+
+    function renderExercises() {
+      const exerciseContainer = document.getElementById('exercise-container');
+      exerciseContainer.innerHTML = '';
+      content.exercises.forEach((exercise, index) => {
+        const exerciseDiv = document.createElement('div');
+        exerciseDiv.className = 'exercise';
+        let questionText, options;
+        if (selectedLanguage === 'en') {
+          questionText = exercise.question;
+          options = exercise.options;
+        } else {
+          questionText = (exercise[selectedLanguage] && exercise[selectedLanguage].question) ? exercise[selectedLanguage].question : exercise.question;
+          options = (exercise[selectedLanguage] && exercise[selectedLanguage].options) ? exercise[selectedLanguage].options : exercise.options;
+        }
+        let optionsHtml = '';
+        options.forEach(option => {
+          optionsHtml += `<div class="option" data-index="${index}" data-option="${option}">${option}</div>`;
+        });
+        exerciseDiv.innerHTML = `
+          <div class="exercise-question">${questionText}</div>
+          <div class="options">
+            ${optionsHtml}
+          </div>
+        `;
+        exerciseContainer.appendChild(exerciseDiv);
+      });
+      if (!document.getElementById('complete-exercises')) {
+        const completeBtn = document.createElement('button');
+        completeBtn.className = 'btn';
+        completeBtn.id = 'complete-exercises';
+        completeBtn.textContent = "I've completed these exercises";
+        exerciseContainer.appendChild(completeBtn);
+        completeBtn.addEventListener('click', () => {
+          document.getElementById('exercises-section').classList.add('hidden');
+          document.getElementById('quiz-section').classList.remove('hidden');
+          currentSection++;
+          updateProgress();
+          renderQuiz();
+        });
+      }
+      const optionElements = document.querySelectorAll('.option');
+      optionElements.forEach(optionEl => {
+        optionEl.addEventListener('click', function() {
+          const siblings = this.parentElement.querySelectorAll('.option');
+          siblings.forEach(sib => sib.classList.remove('selected'));
+          this.classList.add('selected');
+        });
+      });
+    }
+
+    function renderQuiz() {
+      const quizContainer = document.getElementById('quiz-container');
+      quizContainer.innerHTML = '';
+      content.quizzes.forEach((quiz, index) => {
+        const quizDiv = document.createElement('div');
+        quizDiv.className = 'exercise';
+        let questionText, options;
+        if (selectedLanguage === 'en') {
+          questionText = quiz.question;
+          options = quiz.options;
+        } else {
+          questionText = (quiz[selectedLanguage] && quiz[selectedLanguage].question) ? quiz[selectedLanguage].question : quiz.question;
+          options = quiz.options;
+        }
+        let optionsHtml = '';
+        options.forEach(option => {
+          optionsHtml += `<div class="option" data-index="${index}" data-option="${option}">${option}</div>`;
+        });
+        quizDiv.innerHTML = `
+          <div class="exercise-question">${questionText}</div>
+          <div class="options">
+            ${optionsHtml}
+          </div>
+        `;
+        quizContainer.appendChild(quizDiv);
+      });
+      if (!document.getElementById('submit-quiz')) {
+        const submitBtn = document.createElement('button');
+        submitBtn.className = 'btn';
+        submitBtn.id = 'submit-quiz';
+        submitBtn.textContent = "Submit Quiz";
+        quizContainer.appendChild(submitBtn);
+        submitBtn.addEventListener('click', checkQuizAnswers);
+      }
+      const quizOptionElements = document.querySelectorAll('#quiz-container .option');
+      quizOptionElements.forEach(optionEl => {
+        optionEl.addEventListener('click', function() {
+          const parentOptions = this.parentElement;
+          const siblings = parentOptions.querySelectorAll('.option');
+          siblings.forEach(sib => sib.classList.remove('selected'));
+          this.classList.add('selected');
+        });
+      });
+    }
+
+    function checkQuizAnswers() {
+      let allCorrect = true;
+      content.quizzes.forEach((quiz, index) => {
+        const options = document.querySelectorAll(`#quiz-container .option[data-index="${index}"]`);
+        let selectedOption = null;
+        options.forEach(option => {
+          if (option.classList.contains('selected')) {
+            selectedOption = option.getAttribute('data-option');
+          }
+        });
+        if (selectedOption === quiz.correct) {
+          options.forEach(option => {
+            if (option.getAttribute('data-option') === selectedOption) {
+              option.classList.add('correct');
+            }
+          });
+        } else {
+          allCorrect = false;
+          options.forEach(option => {
+            if (option.getAttribute('data-option') === selectedOption) {
+              option.classList.add('incorrect');
+            }
+            if (option.getAttribute('data-option') === quiz.correct) {
+              option.classList.add('correct');
+            }
+          });
+        }
+      });
+      if (allCorrect) {
+        document.getElementById('quiz-success').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('quiz-section').classList.add('hidden');
+          document.getElementById('completion-section').classList.remove('hidden');
+          currentSection++;
+          updateProgress();
+        }, 2000);
+      } else {
+        document.getElementById('quiz-failure').style.display = 'block';
+      }
+    }
+
+    document.getElementById('retry-quiz').addEventListener('click', () => {
+      document.getElementById('quiz-failure').style.display = 'none';
+      renderQuiz();
+    });
+
+    document.getElementById('complete-words').addEventListener('click', () => {
+      document.getElementById('words-section').classList.add('hidden');
+      document.getElementById('sentences-section').classList.remove('hidden');
+      currentSection++;
+      updateProgress();
+      renderSentences();
+    });
+
+    document.getElementById('complete-sentences').addEventListener('click', () => {
+      document.getElementById('sentences-section').classList.add('hidden');
+      document.getElementById('exercises-section').classList.remove('hidden');
+      currentSection++;
+      updateProgress();
+      renderExercises();
+    });
+
+    const languageButtons = document.querySelectorAll('.language-btn');
+    languageButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        languageButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        selectedLanguage = this.getAttribute('data-lang');
+        // Re-render the current section if visible
+        if (!document.getElementById('words-section').classList.contains('hidden')) {
+          renderWords();
+        }
+        if (!document.getElementById('sentences-section').classList.contains('hidden')) {
+          renderSentences();
+        }
+        if (!document.getElementById('exercises-section').classList.contains('hidden')) {
+          renderExercises();
+        }
+        if (!document.getElementById('quiz-section').classList.contains('hidden')) {
+          renderQuiz();
+        }
+      });
+    });
+
+    // Initial rendering
+    renderWords();
+    updateProgress();
+  </script>
+</body>
+</html>
